@@ -384,7 +384,7 @@ async function main(): Promise<void> {
 					transport = session.transport;
 				} else {
 					transport = new StreamableHTTPServerTransport({
-						sessionIdGenerator: () => crypto.randomUUID(),
+						sessionIdGenerator: () => crypto.randomUUID(), enableJsonResponse: true,
 						onsessioninitialized: newSessionId => {
 							transports.set(newSessionId, { transport, lastAccess: Date.now() });
 						},
@@ -394,7 +394,7 @@ async function main(): Promise<void> {
 					await server.connect(transport);
 				}
 
-				await transport.handleRequest(req, res);
+				await transport.handleRequest(req, res, req.body);
 				return;
 			}
 
